@@ -52,7 +52,7 @@ void System::create_simulation(size_t save_index) {
 	Simulation::setSimulationPar(&(_save.sim_save[save_index]));
 	//simulate(sim_num);
 	//multi thread simulation
-	size_t t_num = 1;
+	size_t t_num = THREADS;
 	std::vector<std::thread> t_vec;
 	for (size_t i = 0; i < t_num; i++) {
 		if (!(sim_num % t_num)) {
@@ -67,6 +67,8 @@ void System::create_simulation(size_t save_index) {
 		t_vec[i].join();
 	}
 
+	//Simulation::combineResults();
+
 	//_save.sim_save[0].max_res = Simulation::max_res;
 
 	//simulation stats
@@ -80,8 +82,9 @@ void System::create_simulation(size_t save_index) {
 void System::simulate(const unsigned long long& sim_num) {
 	Clock status_timer;
 	Clock save_timer;
+	Simulation sim;
 	for (unsigned long i = 0; i < sim_num; i++) {
-		Simulation sim;
+		sim.calculate();
 		if (status_timer.getTimeInS() > 1.5) {
 			std::cout << "Thread " << std::this_thread::get_id() << " :" << ((double)i / sim_num) * 100 << " %" << std::endl;
 			status_timer.reset();

@@ -4,6 +4,9 @@
 #include <random>
 #include <time.h>
 #include <vector>
+#include <map>
+#include <thread>
+#define THREADS 1
 
 //dream barters & blaze kill
 const short DREAM_BARTERS = 262;
@@ -47,20 +50,20 @@ struct SaveFile {
 	std::vector<SimSaveFile> sim_save;
 };
 
+struct ThreadSave {
+	std::thread::id id;
+	SimSaveFile save;
+	bool used = false;
+};
+
 class Simulation {
 public:
 	Simulation();
-	//returns current simulation result
-	//Res_Table getResult();
-	//update results
-	//static void updateMaxRes(const Res_Table& results);
 	static uint32_t MWC64X();
 	static void setSimulationPar(SimSaveFile* config);
-	static void setSaveFile();
+	static void combineResults();
+	void calculate();
 public:
-	//results
-	static Max_Sim_Res max_res;
-
 	//seed
 	static uint64_t seed;
 private:
@@ -79,6 +82,10 @@ private:
 	static unsigned long long _C_BART_COMP;
 	static unsigned long long _C_BR_COMP;
 
+
+	int t_index = -1;
 	static SimSaveFile* _CURRENT_SAVE;
+	static ThreadSave _t_saves[THREADS];
+
 };
 
