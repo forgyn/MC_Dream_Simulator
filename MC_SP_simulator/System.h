@@ -8,32 +8,36 @@
 #include "Simulation.h"
 #include <chrono>
 #include <thread>
+#include <sstream>
 
-struct SaveFile {
-	Max_Sim_Res max_res;
-	unsigned long long sim_comp = 0;
-	unsigned long long all_barters = 0;
-	unsigned long long all_br_received = 0;
-};
+
+
+
 
 class System {
 public:
 	System();
 	~System();
 	void run();
-	void create_fast_simulation();
+	void create_simulation(size_t save_index);
+	void manage_custom_simulation();
 	void simulate(const unsigned long long& sim_num);
-	void create_custom_simulation();
-	void print_results();
-	void save();
-	void load();
-	void clear_data();
+	void print_results(size_t save_index);
+	size_t selectSimulation();
+	//void save(std::string sim_name);
+	//SaveFile load(std::string sim_name);
+	
 	template<class T>
-	unsigned long getInput(std::string text, T max, T min = 0);
+	T getInput(std::string text, T max, T min = 0);
+	bool loadSaveFile();
+	void saveSaveFile();
+	void createSaveFile();
+	void clearSave();
 
 private:
 	bool _system_running = true;
-
+	//saves, 1. is always default
+	SaveFile _save;
 };
 
 class Clock {

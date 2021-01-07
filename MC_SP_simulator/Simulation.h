@@ -4,7 +4,16 @@
 #include <random>
 #include <time.h>
 #include <vector>
-#include "simdxorshift128plus.h"
+
+//dream barters & blaze kill
+const short DREAM_BARTERS = 262;
+const short DREAM_BARTERS_SUCCES = 42;
+const short DREAM_BLAZES_KILLED = 305;
+const short DREAM_BR_RECEIVED = 211;
+
+//default minecraft prop
+const double EP_P = 20.f / 459.f;
+const double BR_P = 0.5f;
 
 //generates random number
 static uint32_t MWC64X(uint64_t* state)
@@ -14,14 +23,6 @@ static uint32_t MWC64X(uint64_t* state)
 	return x ^ c;
 }
 
-//result table
-struct Res_Table {
-	unsigned ep_received;
-	unsigned barters;
-	unsigned br_received;
-	unsigned blaze_kills;
-};
-
 //maximal results from multiple simulations
 struct Max_Sim_Res {
 	unsigned barters = 0;
@@ -30,43 +31,54 @@ struct Max_Sim_Res {
 	unsigned br_received_comb = 0;
 };
 
+struct SimSaveFile {
+	Max_Sim_Res max_res;
+	unsigned long long sim_comp = 0;
+	unsigned long long all_barters = 0;
+	unsigned long long all_br_received = 0;
+	double ep_p = EP_P;
+	double br_p = BR_P;
+	short barters = DREAM_BARTERS;
+	short blaze_kills = DREAM_BLAZES_KILLED;
+};
+
+struct SaveFile {
+	size_t sim_save_num;
+	std::vector<SimSaveFile> sim_save;
+};
+
 class Simulation {
 public:
 	Simulation();
 	//returns current simulation result
-	Res_Table getResult();
+	//Res_Table getResult();
 	//update results
-	static void updateMaxRes(const Res_Table& results);
+	//static void updateMaxRes(const Res_Table& results);
 	static uint32_t MWC64X();
+	static void setSimulationPar(SimSaveFile* config);
+	static void setSaveFile();
 public:
 	//results
-	static Max_Sim_Res _max_res;
-	static unsigned long long sim_completed;
-	static unsigned long long all_barters;
-	static unsigned long long all_br_received;
-	//dream barters & blaze kills
-	static const short _DREAM_BARTERS = 262;
-	static const short _DREAM_BARTERS_SUCCES = 42;
-	static const short _DREAM_BLAZES_KILLED = 305;
-	static const short _DREAM_BR_RECEIVED = 211;
-
-	//custom barters & blaze kills
-	static short _BARTERS;
-	static short _BLAZE_KILLS;
+	static Max_Sim_Res max_res;
 
 	//seed
 	static uint64_t seed;
 private:
 	//ender pearls from barter
-	unsigned ep_received = 0;
 	unsigned barters = 0;
 
 	//blare rods from blaze kills
 	unsigned br_received = 0;
-	unsigned blazes_killed = 0;
 
-	//simulation variables
-	static const double ep_p;
-	static const double br_p;
+	//custom barters & blaze kills
+	static short _C_BARTERS;
+	static short _C_BLAZE_KILLS;
+	static double _C_EP_P;
+	static double _C_BR_P;
+	static unsigned long long _C_SIM_COMP;
+	static unsigned long long _C_BART_COMP;
+	static unsigned long long _C_BR_COMP;
+
+	static SimSaveFile* _CURRENT_SAVE;
 };
 
