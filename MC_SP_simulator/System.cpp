@@ -85,10 +85,10 @@ void System::simulate(const unsigned long long& sim_num) {
 	Simulation sim;
 	for (unsigned long i = 0; i < sim_num; i++) {
 		sim.calculate();
-		if (status_timer.getTimeInS() > 1.5) {
+		/*if (status_timer.getTimeInS() > 1.5) {
 			std::cout << "Thread " << std::this_thread::get_id() << " :" << ((double)i / sim_num) * 100 << " %" << std::endl;
 			status_timer.reset();
-		}
+		}*/
 	}
 }
 

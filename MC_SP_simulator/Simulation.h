@@ -6,7 +6,8 @@
 #include <vector>
 #include <map>
 #include <thread>
-#define THREADS 1
+#include <mutex>
+#define THREADS 10
 
 //dream barters & blaze kill
 const short DREAM_BARTERS = 262;
@@ -59,10 +60,12 @@ struct ThreadSave {
 class Simulation {
 public:
 	Simulation();
+	~Simulation();
 	static uint32_t MWC64X();
 	static void setSimulationPar(SimSaveFile* config);
 	static void combineResults();
 	void calculate();
+	void combineThreadRes();
 public:
 	//seed
 	static uint64_t seed;
@@ -74,18 +77,17 @@ private:
 	unsigned br_received = 0;
 
 	//custom barters & blaze kills
-	static short _C_BARTERS;
-	static short _C_BLAZE_KILLS;
-	static double _C_EP_P;
-	static double _C_BR_P;
-	static unsigned long long _C_SIM_COMP;
-	static unsigned long long _C_BART_COMP;
-	static unsigned long long _C_BR_COMP;
+	//static short _C_BARTERS;
+	//static short _C_BLAZE_KILLS;
+	//static double _C_EP_P;
+	//static double _C_BR_P;
+	//static unsigned long long _C_SIM_COMP;
+	//static unsigned long long _C_BART_COMP;
+	//static unsigned long long _C_BR_COMP;
 
 
-	int t_index = -1;
 	static SimSaveFile* _CURRENT_SAVE;
-	static ThreadSave _t_saves[THREADS];
-
+	SimSaveFile _save;
+	static std::mutex mutex;
 };
 
