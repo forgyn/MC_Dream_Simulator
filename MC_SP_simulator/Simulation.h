@@ -5,6 +5,7 @@
 #include <time.h>
 #include <vector>
 #include <mutex>
+
 //dream barters & blaze kill
 const short DREAM_BARTERS = 262;
 const short DREAM_BARTERS_SUCCES = 42;
@@ -52,35 +53,15 @@ public:
 	Simulation();
 	~Simulation();
 	void run();
-	//returns current simulation result
-	//Res_Table getResult();
-	//update results
-	//static void updateMaxRes(const Res_Table& results);
 	static uint32_t MWC64X();
 	static void setSimulationPar(SimSaveFile* config);
 	void combineThreadRes();
 public:
 	//results
 	static Max_Sim_Res max_res;
-
 	//seed
 	static uint64_t seed;
 private:
-	//ender pearls from barter
-	
-
-	//blare rods from blaze kills
-	
-
-	//custom barters & blaze kills
-	static short _C_BARTERS;
-	static short _C_BLAZE_KILLS;
-	static double _C_EP_P;
-	static double _C_BR_P;
-	static unsigned long long _C_SIM_COMP;
-	static unsigned long long _C_BART_COMP;
-	static unsigned long long _C_BR_COMP;
-
 	static SimSaveFile* _CURRENT_SAVE;
 	SimSaveFile* _save = nullptr;
 	static std::mutex _mutex;

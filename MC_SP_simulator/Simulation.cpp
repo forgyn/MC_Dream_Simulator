@@ -1,13 +1,5 @@
 #include "Simulation.h"
 
-
-short Simulation::_C_BARTERS = 1;
-short Simulation::_C_BLAZE_KILLS = 1;
-double Simulation::_C_EP_P = EP_P;
-double Simulation::_C_BR_P = BR_P;
-unsigned long long Simulation::_C_SIM_COMP = 0;
-unsigned long long Simulation::_C_BART_COMP = 0;
-unsigned long long Simulation::_C_BR_COMP = 0;
 SimSaveFile* Simulation::_CURRENT_SAVE = nullptr;
 uint64_t Simulation::seed = time(NULL);
 Max_Sim_Res Simulation::max_res = Max_Sim_Res{ 0,0,0,0 };
@@ -51,18 +43,6 @@ void Simulation::run()
 	_save->all_br_received += br_received;
 }
 
-
-//void Simulation::updateMaxRes(const Res_Table& res) {
-//		if (res.br_received > max_res.br_received)max_res.br_received = res.br_received;
-//
-//		if (res.barters > max_res.barters)_max_res.barters = res.barters;
-//
-//		if (res.br_received > _max_res.br_received_comb && res.barters > _max_res.barters_comb) {
-//			_max_res.barters_comb = res.barters;
-//			_max_res.br_received_comb = res.br_received;
-//		}		
-//}
-
 uint32_t Simulation::MWC64X() {
 	uint32_t c = (seed) >> 32, x = (seed) & 0xFFFFFFFF;
 	seed = x * ((uint64_t)4294883355U) + c;
@@ -73,7 +53,6 @@ void Simulation::setSimulationPar(SimSaveFile* config)
 {
 	_CURRENT_SAVE = config;
 }
-
 
 void Simulation::combineThreadRes() {
 	std::unique_lock<std::mutex> lock(_mutex);

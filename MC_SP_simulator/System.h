@@ -24,9 +24,6 @@ public:
 	void simulate(const unsigned long long& sim_num);
 	void print_results(size_t save_index);
 	size_t selectSimulation();
-	//void save(std::string sim_name);
-	//SaveFile load(std::string sim_name);
-	
 	template<class T>
 	T getInput(std::string text, T max, T min = 0);
 	bool loadSaveFile();

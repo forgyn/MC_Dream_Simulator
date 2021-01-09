@@ -3,14 +3,7 @@
 
 System::System() { 
 	std::cout << "Current seed: " << Simulation::seed << std::endl;
-	//_saves.push_back(load("def_sim.dat"));
-
-	if (!loadSaveFile()) {
-
-	}
-
-
-	//load(); 
+	loadSaveFile();
 }
 
 System::~System() {
@@ -47,11 +40,7 @@ void System::create_simulation(size_t save_index) {
 	Clock status_timer;
 	Clock save_timer;
 
-	//set default sim parameters
-
 	Simulation::setSimulationPar(&(_save.sim_save[save_index]));
-	//simulate(sim_num);
-	//multi thread simulation
 	
 	size_t t_num = 4;
 	std::vector<std::thread> t_vec;
@@ -68,8 +57,6 @@ void System::create_simulation(size_t save_index) {
 	for (size_t i = 0; i < t_num; i++) {
 		t_vec[i].join();
 	}
-
-	//_save.sim_save[0].max_res = Simulation::max_res;
 
 	//simulation stats
 	double sim_duration_s = sim_clock.getTimeInS();
@@ -195,35 +182,8 @@ size_t System::selectSimulation()
 	}
 }
 
-
-//void System::save(std::string sim_name) {
-//	SaveFile save = {Simulation::_max_res,Simulation::sim_completed,Simulation::all_barters,Simulation::all_br_received};
-//	std::fstream output(sim_name,std::ios::binary | std::ios::out);
-//	output.write((char*)&save, sizeof(SaveFile));
-//	output.close();
-//	std::cout << "Results saved!" << std::endl;
-//}
-//
-//SaveFile System::load(std::string sim_name) {
-//	SaveFile save;
-//	std::fstream input(sim_name, std::ios::binary | std::ios::in);
-//	input.read((char*)&save,sizeof(SaveFile));
-//	/*Simulation::_max_res = save.max_res;
-//	Simulation::sim_completed = save.sim_comp;
-//	Simulation::all_barters = save.all_barters;
-//	Simulation::all_br_received = save.all_br_received;*/
-//	input.close();
-//	std::cout << "Results from "<<sim_name<<" loaded!" << std::endl;
-//	return save;
-//}
-
 void System::clearSave()
-{
-	//clear results
-	//Simulation::_max_res = { 0,0,0,0};
-	//Simulation::sim_completed = 0;
-
-	//clear save file
+{	//clear save file
 	std::fstream save("SaveFile.dat", std::ios::binary | std::ios::out);
 	save << 1;
 	SimSaveFile def_save;
@@ -249,8 +209,8 @@ bool System::loadSaveFile() {
 		return true;
 	}
 	else {
-		createSaveFile();
 		save.close();
+		createSaveFile();
 		return false;
 	}
 }
@@ -280,6 +240,7 @@ void System::createSaveFile()
 	SimSaveFile def_save;
 	save.write((char*)&def_save, sizeof(SimSaveFile));
 	save.close();
+	_save.sim_save.push_back(def_save);
 }
 
 template<class T>
